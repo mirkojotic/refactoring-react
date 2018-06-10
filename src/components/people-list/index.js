@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import PostList from '../post-list'
 
 export default class extends React.Component {
 
@@ -45,18 +46,8 @@ export default class extends React.Component {
                     
                 { this.state.user ? (
                     <div className="details-container">
-                        <div className="user-details">
-                            <div><b>User Details:</b></div>
-                            <div>{this.state.user.name}</div>
-                            <div>{this.state.user.username}</div>
-                            <div>{this.state.user.email}</div>
-                        </div>
-                        <ul className="user-posts">
-                            <li><b>Posts:</b></li>
-                            { this.state.posts.map(post => (
-                                <li key={post.id}>{ post.title }</li>
-                            ))}
-                        </ul>
+                        <UserDetails user={this.state.user} />
+                        <PostList posts={this.state.posts} />
                     </div>
                 ) : " " }
             </div>

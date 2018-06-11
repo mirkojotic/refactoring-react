@@ -6,9 +6,9 @@ import API from './api'
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <UserDetailsPage {...API} />
-      </div>
+        <div className="App">
+          <UserDetailsPage {...API} />
+        </div>
     );
   }
 }

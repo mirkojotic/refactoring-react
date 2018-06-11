@@ -1,43 +1,54 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import UserSelector from '../user-selector'
 import UserDetails from '../user-details'
 import PostList from '../post-list'
+import { addUsers, addUser, removeUser, addPosts, removePosts } from '../../actions'
 
-export default class extends React.Component {
-
-    state = {
-        users: [],
-        user: null,
-        posts: []
-    }
+class UserDetailsPage extends React.Component {
 
     componentDidMount() {
-        this.props.getUsers()
-            .then(users => this.setState({ users }))
+        this.props.getUsers().then(this.props.addUsers)
     }
 
-    onChange = evt => {
-        const id = evt.target.value
+    onChange = id => {
         if (id) {
-            this.props.getUser(id).then(user => this.setState({ user }))
-            this.props.getPosts(id).then(posts => this.setState({ posts }))
+            this.props.getUser(id).then(this.props.addUser)
+            this.props.getPosts(id).then(this.props.addPosts)
         } else {
-            this.setState({ user: null })
-            this.setState({ posts: [] })
+            this.props.removeUser()
         }
     }
 
     render() {
+        const { users, user, posts } = this.props
         return (
             <div>
-                <UserSelector users={this.state.users} onChange={this.onChange} />
-                { this.state.user ? (
+                <UserSelector users={users} onChange={this.onChange} />
+                { user ? (
                     <div className="details-container">
-                        <UserDetails user={this.state.user} />
-                        <PostList posts={this.state.posts} />
+                        <UserDetails user={user} />
+                        <PostList posts={posts} />
                     </div>
                 ) : " " }
             </div>
         )
     }
 }
+
+const enhance = connect(
+    state => ({
+        users: state.users,
+        user: state.user,
+        posts: state.posts
+    }),
+    { 
+        addUsers, 
+        addUser, 
+        removeUser, 
+        addPosts, 
+        removePosts 
+    }
+)
+
+export default enhance(UserDetailsPage)
